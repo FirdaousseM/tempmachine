@@ -1,0 +1,70 @@
+{
+  ".svelte-kit/generated/client-optimized/app.js": {
+    "file": "_app/immutable/entry/app.meKCMhJx.js",
+    "src": ".svelte-kit/generated/client-optimized/app.js",
+    "isEntry": true,
+    "imports": [
+      "_scheduler.BvLojk_z.js",
+      "_index.SXUR_2us.js"
+    ],
+    "dynamicImports": [
+      ".svelte-kit/generated/client-optimized/nodes/0.js",
+      ".svelte-kit/generated/client-optimized/nodes/1.js",
+      ".svelte-kit/generated/client-optimized/nodes/2.js"
+    ]
+  },
+  ".svelte-kit/generated/client-optimized/nodes/0.js": {
+    "file": "_app/immutable/nodes/0.D7aMrLYx.js",
+    "src": ".svelte-kit/generated/client-optimized/nodes/0.js",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_scheduler.BvLojk_z.js",
+      "_index.SXUR_2us.js"
+    ]
+  },
+  ".svelte-kit/generated/client-optimized/nodes/1.js": {
+    "file": "_app/immutable/nodes/1.Cpc8L01R.js",
+    "src": ".svelte-kit/generated/client-optimized/nodes/1.js",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_scheduler.BvLojk_z.js",
+      "_index.SXUR_2us.js",
+      "_entry.BXWi9hPP.js"
+    ]
+  },
+  ".svelte-kit/generated/client-optimized/nodes/2.js": {
+    "file": "_app/immutable/nodes/2.BG3uSvN5.js",
+    "src": ".svelte-kit/generated/client-optimized/nodes/2.js",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_scheduler.BvLojk_z.js",
+      "_index.SXUR_2us.js"
+    ]
+  },
+  "_entry.BXWi9hPP.js": {
+    "file": "_app/immutable/chunks/entry.BXWi9hPP.js",
+    "imports": [
+      "_scheduler.BvLojk_z.js"
+    ]
+  },
+  "_index.SXUR_2us.js": {
+    "file": "_app/immutable/chunks/index.SXUR_2us.js",
+    "imports": [
+      "_scheduler.BvLojk_z.js"
+    ]
+  },
+  "_scheduler.BvLojk_z.js": {
+    "file": "_app/immutable/chunks/scheduler.BvLojk_z.js"
+  },
+  "node_modules/@sveltejs/kit/src/runtime/client/entry.js": {
+    "file": "_app/immutable/entry/start.DnLNC7Yu.js",
+    "src": "node_modules/@sveltejs/kit/src/runtime/client/entry.js",
+    "isEntry": true,
+    "imports": [
+      "_entry.BXWi9hPP.js"
+    ]
+  }
+}
