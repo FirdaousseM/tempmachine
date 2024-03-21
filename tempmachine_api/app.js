@@ -6,7 +6,7 @@ const azureController = require("./src/controller/azureController.js");
 app.use(express.json());
 
 // User routes
-app.use("/azure", azureController);
+app.use("/vm", azureController);
 
 // Middleware for error handling
 app.use((err, req, res, next) => {
