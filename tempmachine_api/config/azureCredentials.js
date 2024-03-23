@@ -1,5 +1,5 @@
 const { DefaultAzureCredential } = require("@azure/identity");
-
+require("dotenv").config({ path: "./config/.env" });
 // Azure platform authentication
 const clientId = process.env["AZURE_CLIENT_ID"];
 const tenantId = process.env["AZURE_TENANT_ID"];

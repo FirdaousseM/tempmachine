@@ -4,30 +4,35 @@ const {
 } = require("../../config/azureCredentials");
 const { ComputeManagementClient } = require("@azure/arm-compute");
 const { ResourceManagementClient } = require("@azure/arm-resources");
-const { StorageManagementClient } = require("@azure/arm-storage");
 const { NetworkManagementClient } = require("@azure/arm-network");
-require("dotenv").config({ path: "./config/.env" });
+
+const { randomNumber } = require("../utils/utils");
+
+let nicInfo = {};
 
 const location = "francecentral";
-const resourceGroupName = "fm-groupe-ressource-test";
-const vnetName = "azure-sample-vnet";
-const subnetName = "azure-sample-subnet";
-const ipConfigName = "azure-sample-ip-config";
-const networkInterfaceName = "azure-sample-nic";
-const vmName = "VmName";
 const adminUsername = "userlogin";
 const adminPassword = "Pa$$w0rd91";
-const domainNameLabel = "testdomainname";
-const publicIPName = "testpip";
+
+const resourceGroupName = "fm-groupe-ressource-test" + randomNumber();
+const vnetName = "azure-sample-vnet" + randomNumber();
+const subnetName = "azure-sample-subnet" + randomNumber();
+const ipConfigName = "azure-sample-ip-config" + randomNumber();
+const networkInterfaceName = "azure-sample-nic" + randomNumber();
+const vmName = "VmName" + randomNumber();
+const domainNameLabel = "testdomainname" + randomNumber();
+const publicIPName = "testpip" + randomNumber();
 
 const vmReference = {
   linux: {
+    name: "linux",
     publisher: "Canonical",
     offer: "UbuntuServer",
     sku: "16.04.0-LTS",
     version: "latest",
   },
   windows: {
+    name: "windows",
     publisher: "MicrosoftWindowsServer",
     offer: "WindowsServer",
     sku: "2016-Datacenter",
@@ -64,12 +69,19 @@ const createPublicIP = async () => {
       domainNameLabel: domainNameLabel,
     },
   };
+  // const pubIp = networkManager.publicIPAddresses.get(
+  //   resourceGroupName,
+  //   publicIPName
+  // );
+  // console.log("publicIP already in use : " + pubIp);
+  // if (pubIp != null) {
   console.log("Creating public IP: " + publicIPName);
   return await networkManager.publicIPAddresses.beginCreateOrUpdateAndWait(
     resourceGroupName,
     publicIPName,
     publicIPParameters
   );
+  // }
 };
 
 const createVnet = async () => {
@@ -181,6 +193,38 @@ const stopVirtualMachine = async () => {
   );
 };
 
+let remainingTime;
+
+const startTimer = (timeToWait) => {
+  console.log(timeToWait);
+  timeToWait *= 60;
+  let remainingTime = timeToWait;
+
+  const countDown = setInterval(() => {
+    remainingTime--;
+
+    console.log(remainingTime);
+
+    let minutes = Math.floor(remainingTime / 60);
+    let seconds = Math.floor(remainingTime % 60);
+
+    console.log(minutes + "min " + seconds + "sec ");
+
+    if (remainingTime <= 0) {
+      console.log("Compte à rebours terminé");
+      deleteVirtualMachine();
+      clearInterval(countDown);
+    }
+  }, 1000);
+};
+
+const getRemainingTime = () => {
+  return {
+    minutes: Math.floor(remainingTime / 60),
+    seconds: Math.floor(remainingTime % 60),
+  };
+};
+
 const deleteVirtualMachine = async () => {
   console.log("Delete VM");
   return await computeManager.virtualMachines.beginDeleteAndWait(
@@ -235,10 +279,19 @@ const stopVM = async (req, res) => {
  */
 const createVM = async (req, res) => {
   try {
-    const os = req.params.os;
-    await createVirtualMachine(os);
-    const virtualMachine = getVirtualMachine();
-    res.json(virtualMachine);
+    if (req.body.user.access != "NONE") {
+      let os;
+      if (req.body.user.access == "ALL") {
+        os = req.body.data.platform;
+      } else {
+        os = "linux";
+      }
+      timeToWait = req.body.data.timeToWait;
+      await createVirtualMachine(vmReference[os], nicInfo.id);
+      const virtualMachine = getVirtualMachine();
+      res.json(virtualMachine);
+      startTimer(timeToWait);
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to create virtual machine" });
@@ -265,25 +318,61 @@ const deleteVM = async (req, res) => {
  * @route GET /configure
  * @returns {Promise<object>} A promise that resolves to a string message of success
  */
-const configureResources = async (req, res) => {
+const configureResources = async () => {
   try {
     await createResourceGroup();
     await createVnet();
     const subnetInfo = await getSubnetInfo();
     await createPublicIP();
-    await createNIC(subnetInfo);
-    res.status(200).json({ message: "All resources successfully configured" });
+    nicInfo = await createNIC(subnetInfo);
+    console.log("All resources successfully configured");
+    // res.status(200).json({ message: "All resources successfully configured" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to configure resources" });
+    // res.status(500).json({ error: "Failed to configure resources" });
+  }
+};
+
+/**
+ * Returns
+ * @route GET /list
+ * @returns {Promise<object[]>} A promise that resolves to an array of string
+ */
+const getOsList = async (req, res) => {
+  try {
+    if (req.param.access == "NONE") {
+      res.json(null);
+    } else if (req.param.access == "LINUX") {
+      res.json(vmReference.linux);
+    } else {
+      res.json(vmReference);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to retreive osList" });
+  }
+};
+
+/**
+ * Returns
+ * @route GET /counter
+ * @returns {Promise<object>} A promise that resolves to an object with time informations
+ */
+const getCounter = async (req, res) => {
+  try {
+    res.json(getRemainingTime());
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to retreive counter" });
   }
 };
 
 module.exports = {
-  test,
   configureResources,
   stopVM,
   startVM,
   createVM,
   deleteVM,
+  getOsList,
+  getCounter,
 };

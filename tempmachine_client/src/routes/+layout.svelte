@@ -1,15 +1,10 @@
 <script>
-    import Navbar from "../lib/components/navbar.svelte";
-    import Footer from "../lib/components/footer.svelte";
-    import SearchBar from "../lib/components/searchBar.svelte";
+  import Header from "../lib/component/header.svelte";
+  
 </script>
 
-<header class="main-header">
-    <!-- Main Nav -->
-    <Navbar />
 
-    <!-- Search Bar -->
-    <!-- <SearchBar /> -->
-</header>
+<Header />
+
 <!-- Main Content -->
 <slot></slot>

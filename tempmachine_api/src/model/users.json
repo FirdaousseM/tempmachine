@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "email": "usernone@mail.com",
+    "password": "password",
+    "access": "NONE"
+  },
+  {
+    "id": 2,
+    "email": "userlinux@mail.com",
+    "password": "password",
+    "access": "LINUX"
+  },
+  {
+    "id": 3,
+    "email": "userall@mail.com",
+    "password": "password",
+    "access": "ALL"
+  }
+]

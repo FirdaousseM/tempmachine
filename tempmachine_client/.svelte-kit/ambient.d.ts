@@ -26,10 +26,6 @@
  * ```
  */
 declare module '$env/static/private' {
-	export const AZURE_TENANT_ID: string;
-	export const AZURE_CLIENT_ID: string;
-	export const AZURE_CLIENT_SECRET: string;
-	export const AZURE_SUBSCRIPTION_ID: string;
 	export const GJS_DEBUG_TOPICS: string;
 	export const LESSOPEN: string;
 	export const USER: string;
@@ -46,6 +42,7 @@ declare module '$env/static/private' {
 	export const HOME: string;
 	export const CHROME_DESKTOP: string;
 	export const LOCPATH_VSCODE_SNAP_ORIG: string;
+	export const OLDPWD: string;
 	export const TERM_PROGRAM_VERSION: string;
 	export const DESKTOP_SESSION: string;
 	export const GTK_PATH: string;
@@ -174,10 +171,6 @@ declare module '$env/static/public' {
  */
 declare module '$env/dynamic/private' {
 	export const env: {
-		AZURE_TENANT_ID: string;
-		AZURE_CLIENT_ID: string;
-		AZURE_CLIENT_SECRET: string;
-		AZURE_SUBSCRIPTION_ID: string;
 		GJS_DEBUG_TOPICS: string;
 		LESSOPEN: string;
 		USER: string;
@@ -194,6 +187,7 @@ declare module '$env/dynamic/private' {
 		HOME: string;
 		CHROME_DESKTOP: string;
 		LOCPATH_VSCODE_SNAP_ORIG: string;
+		OLDPWD: string;
 		TERM_PROGRAM_VERSION: string;
 		DESKTOP_SESSION: string;
 		GTK_PATH: string;
